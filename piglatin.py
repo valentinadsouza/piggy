@@ -11,17 +11,18 @@ class TestPigLatin(unittest.TestCase):
 		'''Takes full phrases and translates into piglatin'''
 
 		# finds groups of word and non-word items
-		chunks = re.findall(r'(\w+|\W+)', english) 
+		chunks = re.finditer(r'(?P<word>\w+)|(?P<non_word>\W+)', english)
 
 		output = ""
-		for w in chunks:
-			if w[0] in string.ascii_letters:
-				output += self.wordTranslate(w)
+		for chunk in chunks:
+			match = chunk.groupdict()
+			if match['word'] is not None:
+				output += self._translate_word(match['word'])
 			else:
-				output += w
+				output += match['non_word']
 		return output.strip()
 		
-	def wordTranslate(self, word):
+	def _translate_word(self, word):
 		'''Only takes ascii character words'''
 		firstLetter = word[0]
 		lowerFirstLetter = word[0].lower()
