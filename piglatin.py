@@ -1,3 +1,4 @@
+import re
 import string
 import unittest
 
@@ -7,18 +8,10 @@ class TestPigLatin(unittest.TestCase):
 		self.vowels = ['a','e','i','o','u']
 
 	def translate(self, english):
-		
-		chunks = []
-		for i, char in enumerate(english):
-			previousChar = english[i-1]
-			if i>0 and char in string.ascii_letters and previousChar in string.ascii_letters:
-				chunks[len(chunks)-1] = "{0}{1}".format(chunks[len(chunks)-1], char)
-			elif char in string.ascii_letters:
-				chunks.append(char)
-			elif i==0 or previousChar in string.ascii_letters:
-				chunks.append(char)
-			else:
-				chunks[len(chunks)-1] = "{0}{1}".format(chunks[len(chunks)-1], char)
+		'''Takes full phrases and translates into piglatin'''
+
+		# finds groups of word and non-word items
+		chunks = re.findall(r'(\w+|\W+)', english) 
 
 		output = ""
 		for w in chunks:
