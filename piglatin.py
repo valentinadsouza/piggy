@@ -10,11 +10,10 @@ class Translator():
 		'''Takes full phrases and translates into piglatin'''
 		# finds groups of word and non-word items
 		chunks = re.finditer(r'(?P<word>\w+)|(?P<non_word>\W+)', english)
-		return ''.join([self._selective_translation(c) for c in chunks])
+		return ''.join([self._selective_translation(c.groupdict()) for c in chunks])
 
-	def _selective_translation(self, chunk):
-		'''This only translates words, i.e. ignores non_words; chunk is a Python MatchObject'''
-		match = chunk.groupdict()
+	def _selective_translation(self, match):
+		'''This only translates words, i.e. leaves non words untouched; match is a dict with 'word' & 'non_word' keys'''
 		if match['word'] is not None:
 			return self._translate_word(match['word'])
 		else:
